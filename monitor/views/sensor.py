@@ -58,13 +58,13 @@ def search_data(request, pk):
         return Response(serializer.data)
     elif format == 'chart':
         res = {
-            'label': [],
+            'labels': [],
             'tempareture': [],
             'humidity': [],
             'co2': [],
         }
         for i in serializer.data:
-            res['label'].append(i['timestamp'])
+            res['labels'].append(i['timestamp'])
             res['tempareture'].append(i['tempareture'])
             res['humidity'].append(i['humidity'])
             res['co2'].append(i['co2'])
