@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from monitor.models import Sensor
+from monitor.models import Sensor, SensingData
 
 
 class SensorSerializer(serializers.ModelSerializer):
@@ -19,3 +19,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'sensor']
+
+
+class SensingDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SensingData
+        fields = ['sensor', 'timestamp', 'tempareture',
+                  'humidity', 'co2', 'created_at']
