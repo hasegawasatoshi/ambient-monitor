@@ -5,6 +5,8 @@ from monitor.models import Sensor
 
 
 class SensorSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
     class Meta:
         model = Sensor
         fields = ['id', 'label', 'owner', 'created_at', 'updated_at']
