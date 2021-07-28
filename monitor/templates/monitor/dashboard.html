@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %}Sensor List{% endblock %}
+
+{% block content %}
+<div class="container-sm">
+    <div class="row">
+        <div class="col-sm">
+            <label for="select" class="form-label">センサー</label>
+            <select id="select" class="form-select" aria-label="Default select example">
+                {% for sensor in sensor_list %}
+                <option value={{ sensor.id }}>{{ sensor.label }} ({{ sensor.id }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-sm">
+            <label for="flatpickr" class="form-label">データ表示日</label>
+            <input type="text" id="flatpickr" class="flatpickr-input" readonly="readonly">
+        </div>
+        <div class="col-sm">
+            <button id="search" type="button" class="btn btn-outline-primary">表示</button>
+        </div>
+    </div>
+</div>
+
+<!-- 
+<div class="container">
+    <canvas id="myChart"></canvas>
+</div>
+-->
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/ja.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    // function drawChart(id, from, to) {
+    //     console.log("hoge")
+
+
+    //     axios({
+    //         method: 'GET',
+    //         url: 'data/'
+    //     }).then(response => {
+    //         console.log(response)
+
+    //         const data = {
+    //             labels: response.data.labels,
+    //             datasets: [{
+    //                 label: '気温',
+    //                 data: response.data.tempareture,
+    //                 fill: true,
+    //                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
+    //                 borderColor: 'rgba(54, 162, 235, 1)',
+    //                 tension: 0.1
+    //             }]
+    //         };
+
+    //         myChart.data = data;
+    //         myChart.update();
+    //     });
+    // }
+
+    // function butotnClick() {
+    //     var obj = document.getElementById('select');
+    //     // 選択されている値の番号を取得
+    //     var idx = obj.selectedIndex;
+    //     console.log(idx);
+    //     // 値を取得
+    //     var txt = obj.options[idx].text;
+    //     console.log(txt);
+
+    //     var sample = document.getElementById('flatpickr');
+    //     var fp = flatpickr(sample);
+    //     const from = moment(fp.selectedDates[0]).unix();
+    //     const to = from + (60 * 60 * 24)
+
+    //     // location.href = `/console/?sensor=${idx}&from=${from}&to=${to}`;
+    //     drawChart(idx, from, to)
+    // }
+
+    // let button = document.getElementById('search');
+    // button.onclick = butotnClick;
+
+    // var ctx = document.getElementById('myChart').getContext('2d');
+    // var myChart = new Chart(ctx, {
+    //     type: 'line',
+    //     data: {},
+    //     options: {}
+    // });
+
+    flatpickr("#flatpickr", {});
+
+    axios({
+        method: 'GET',
+        url: '/api/sensor/'
+    }).then(response => {
+        console.log(response)
+    });
+
+</script>
+
+
+
+{% endblock %}
