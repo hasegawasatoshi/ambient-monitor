@@ -40,7 +40,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/ja.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0"></script>
+
 
 <script>
 
@@ -112,12 +114,38 @@
 
     const temparetureChart = new Chart((() => {
         return document.getElementById('temparetureChart').getContext('2d');
-    })(),
-        {
-            type: 'line',
-            data: {},
-            options: {}
-        });
+    })(), {
+        type: 'line',
+        data: {},
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    scaleLabel: {
+                        display: true,
+                        labelString: '時間'
+                    },
+                    type: 'time',
+                    time: {
+                        parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ',
+                        unit: 'hour',
+                        stepSize: 1,
+                        displayFormats: {
+                            'hour': 'H時'
+                        }
+                    }
+                },
+                y: {
+                    suggestedMax: 35,
+                    suggestedMin: 10
+                }
+            }
+        }
+    });
 
     const humidityChart = new Chart((() => {
         return document.getElementById('humidityChart').getContext('2d');
@@ -125,7 +153,34 @@
         {
             type: 'line',
             data: {},
-            options: {}
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        scaleLabel: {
+                            display: true,
+                            labelString: '時間'
+                        },
+                        type: 'time',
+                        time: {
+                            parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ',
+                            unit: 'hour',
+                            stepSize: 1,
+                            displayFormats: {
+                                'hour': 'H時'
+                            }
+                        }
+                    },
+                    y: {
+                        suggestedMax: 100,
+                        suggestedMin: 0
+                    }
+                }
+            }
         });
 
     const co2Chart = new Chart((() => {
@@ -134,7 +189,34 @@
         {
             type: 'line',
             data: {},
-            options: {}
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        scaleLabel: {
+                            display: true,
+                            labelString: '時間'
+                        },
+                        type: 'time',
+                        time: {
+                            parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ',
+                            unit: 'hour',
+                            stepSize: 1,
+                            displayFormats: {
+                                'hour': 'H時'
+                            }
+                        }
+                    },
+                    y: {
+                        suggestedMax: 1800,
+                        suggestedMin: 400
+                    }
+                }
+            }
         });
 
     flatpickr("#flatpickr", {});
