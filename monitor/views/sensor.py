@@ -64,7 +64,8 @@ def search_data(request, pk):
             'co2': [],
         }
         for i in serializer.data:
-            res['labels'].append(i['timestamp'])
+            ts = datetime.strptime(i['timestamp'], '%Y-%m-%dT%H:%M:%S.%f%z')
+            res['labels'].append(ts.strftime('%m/%d %H:%M'))
             res['tempareture'].append(i['tempareture'])
             res['humidity'].append(i['humidity'])
             res['co2'].append(i['co2'])
