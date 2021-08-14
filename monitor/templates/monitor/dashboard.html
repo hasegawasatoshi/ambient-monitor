@@ -3,21 +3,23 @@
 
 {% block content %}
 <div class="container-sm">
-    <div class="row">
-        <div class="col-sm">
-            <label for="select" class="form-label">センサー</label>
-            <select id="select" class="form-select" aria-label="Default select example">
-                {% for sensor in sensor_list %}
-                <option value={{ sensor.id }}>{{ sensor.id }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-sm">
-            <label for="flatpickr" class="form-label">データ表示日</label>
-            <input type="text" id="flatpickr" class="flatpickr-input" readonly="readonly">
-        </div>
-        <div class="col-sm">
-            <button id="search" type="button" class="btn btn-outline-primary">表示</button>
+    <div class="shadow-sm p-3 mb-5 bg-white rounded">
+        <div class="row">
+            <div class="col-sm">
+                <label for="select" class="form-label">センサー</label>
+                <select id="select" class="form-select" aria-label="Sensor">
+                    {% for sensor in sensor_list %}
+                    <option value={{ sensor.id }}>{{ sensor.id }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm">
+                <label for="flatpickr" class="form-label">データ表示日</label>
+                <input type="text" id="flatpickr" class="flatpickr-input" readonly="readonly">
+            </div>
+            <div class="col-sm">
+                <button id="search" type="button" class="btn btn-outline-primary">表示</button>
+            </div>
         </div>
     </div>
 </div>
@@ -25,24 +27,32 @@
 
 <div class="container">
     <div class="container-sm">
-        <canvas id="temparetureChart"></canvas>
+        <div class="shadow-sm p-3 mb-5 bg-white rounded">
+            <p>温度</p>
+            <canvas id="temparetureChart"></canvas>
+        </div>
     </div>
     <div class="container-sm">
-        <canvas id="humidityChart"></canvas>
+        <div class="shadow-sm p-3 mb-5 bg-white rounded">
+            <p>湿度</p>
+            <canvas id="humidityChart"></canvas>
+        </div>
     </div>
     <div class="container-sm">
-        <canvas id="co2Chart"></canvas>
+        <div class="shadow-sm p-3 mb-5 bg-white rounded">
+            <p>CO2</p>
+            <canvas id="co2Chart"></canvas>
+        </div>
     </div>
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/ja.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 
 <script>
 
@@ -112,9 +122,7 @@
     let button = document.getElementById('search');
     button.onclick = butotnClick;
 
-    const temparetureChart = new Chart((() => {
-        return document.getElementById('temparetureChart').getContext('2d');
-    })(), {
+    const chartConfig = {
         type: 'line',
         data: {},
         options: {
@@ -138,91 +146,25 @@
                             'hour': 'H時'
                         }
                     }
-                },
-                y: {
-                    suggestedMax: 35,
-                    suggestedMin: 10
                 }
             }
         }
-    });
+    };
+
+    const temparetureChart = new Chart((() => {
+        return document.getElementById('temparetureChart').getContext('2d');
+    })(), Object.assign({}, chartConfig));
 
     const humidityChart = new Chart((() => {
         return document.getElementById('humidityChart').getContext('2d');
-    })(),
-        {
-            type: 'line',
-            data: {},
-            options: {
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    x: {
-                        scaleLabel: {
-                            display: true,
-                            labelString: '時間'
-                        },
-                        type: 'time',
-                        time: {
-                            parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ',
-                            unit: 'hour',
-                            stepSize: 1,
-                            displayFormats: {
-                                'hour': 'H時'
-                            }
-                        }
-                    },
-                    y: {
-                        suggestedMax: 100,
-                        suggestedMin: 0
-                    }
-                }
-            }
-        });
+    })(), Object.assign({}, chartConfig));
 
     const co2Chart = new Chart((() => {
         return document.getElementById('co2Chart').getContext('2d');
-    })(),
-        {
-            type: 'line',
-            data: {},
-            options: {
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    x: {
-                        scaleLabel: {
-                            display: true,
-                            labelString: '時間'
-                        },
-                        type: 'time',
-                        time: {
-                            parser: 'YYYY-MM-DDTHH:mm:ss.SSSSSSZ',
-                            unit: 'hour',
-                            stepSize: 1,
-                            displayFormats: {
-                                'hour': 'H時'
-                            }
-                        }
-                    },
-                    y: {
-                        suggestedMax: 1800,
-                        suggestedMin: 400
-                    }
-                }
-            }
-        });
+    })(), Object.assign({}, chartConfig));
 
     flatpickr("#flatpickr", {});
 
 </script>
-
-
 
 {% endblock %}
