@@ -14,7 +14,7 @@ JST = timezone(timedelta(hours=+9), 'JST')
 
 
 def now():
-    return int(datetime.now(timezone.utc).strftime('%s'))
+    return int(datetime.now().strftime('%s'))
 
 
 def epoch_to_iso_jst(epoch):
@@ -22,7 +22,7 @@ def epoch_to_iso_jst(epoch):
         v = int(epoch)
     except Exception:
         v = now()
-    return datetime.fromtimestamp(v).replace(tzinfo=timezone.utc).astimezone(tz=JST).isoformat()
+    return datetime.fromtimestamp(v).astimezone(tz=JST).isoformat()
 
 
 def search_data(request, pk):
