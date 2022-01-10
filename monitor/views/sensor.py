@@ -86,18 +86,41 @@ def post_data(request, pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+def purge_data(request, pk):
+    try:
+        sensor = Sensor.objects.get(pk=pk)
+        sensor_serializer = SensorSerializer(sensor)
+        if sensor_serializer.data['owner'] != str(request.user):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    except Sensor.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        to_dt = int(request.data['to'])
+    except Exception:
+        to_dt = now() - (3600 * 24 * 30)  # default 30 days
+    finally:
+        to_dt = epoch_to_iso_jst(to_dt)
+
+    SensingData.objects.filter(sensor=sensor, timestamp__lte=to_dt).delete()
+    return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+
 class SensorViewSet(viewsets.ModelViewSet):
     queryset = Sensor.objects.all()
     serializer_class = SensorSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
-    @ action(detail=True, methods=['GET', 'POST'])
+    @ action(detail=True, methods=['GET', 'POST', 'DELETE'])
     def data(self, request, *args, **kwargs):
         if request.method == 'GET':
             return search_data(request, kwargs['pk'])
 
         elif request.method == 'POST':
             return post_data(request, kwargs['pk'])
+
+        elif request.method == 'DELETE':
+            return purge_data(request, kwargs['pk'])
 
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
